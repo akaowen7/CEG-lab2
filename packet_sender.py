@@ -40,15 +40,12 @@ hexServerAddress = []
 for i in serverAddress.split('.'):
     hexServerAddress.append(hex(int(i)))
 
-print(hexServerAddress)
-
 hexServerAddressGrouped = groupHex(hexServerAddress)
 
 header.append(hexServerAddressGrouped[0])
 header.append(hexServerAddressGrouped[1])
 header.append('c0a8') # This is just 192.168.0.1 in hex
 header.append('0001') # We might not want to hard-code this...
-
 
 #           Calculate checksum
 # Sum all packets in the header
@@ -66,5 +63,4 @@ checksum = hex(int('FFFF', 16) - int(checksum, 16))
 
 header[5] = checksum[2:]
 
-# Send the packet (Not sure how this works)
 clientSocket.send(bytes.fromhex(''.join(header) + ''.join(hexPayloadGrouped)))
