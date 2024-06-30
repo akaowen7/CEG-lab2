@@ -34,8 +34,9 @@ while True:
 
     # check if the check sum is correct
     if ones_complement == check_sum:
-      print(message)
+      print(str(bytes.fromhex(message))[2:-1])
       break
     else:
       print('Check sum failed')
       break
+
