@@ -18,7 +18,6 @@ def groupHex(hexList):
 # Send a websocket message to the server
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSocket.connect(('localhost', 80))
-# clientSocket.send(b"Hello, world!")
 
 # Pull address and payload from command line arguments
 serverAddress = sys.argv[2]
@@ -30,7 +29,6 @@ for i in payload:
     hexPayload.append(hex(ord(i)))
 
 hexPayloadGrouped = groupHex(hexPayload)
-
 
 # Create header
 header = ['4500', '0028', '1c46', '4000', '4006', '0000']
@@ -44,10 +42,10 @@ hexServerAddressGrouped = groupHex(hexServerAddress)
 
 header.append(hexServerAddressGrouped[0])
 header.append(hexServerAddressGrouped[1])
-header.append('c0a8') # This is just 192.168.0.1 in hex
-header.append('0001') # We might not want to hard-code this...
+header.append('c0a8'); header.append('0001')
 
 #           Calculate checksum
+# --------------------------------------
 # Sum all packets in the header
 checksum = hex(0)
 for i in header:
@@ -61,6 +59,8 @@ if int(checksum, 16) > int('FFFF', 16):
 # One's Complement
 checksum = hex(int('FFFF', 16) - int(checksum, 16))
 
+# Replaces checksum in the header 
 header[5] = checksum[2:]
 
+# Sends the message
 clientSocket.send(bytes.fromhex(''.join(header) + ''.join(hexPayloadGrouped)))
